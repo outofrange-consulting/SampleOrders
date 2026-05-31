@@ -63,7 +63,7 @@ app.MapPost("/orders/{id}/confirm", async (Guid id, IDocumentSession session) =>
     order.Apply(confirmedEvent);
     session.Events.Append(id, confirmedEvent);
     await session.SaveChangesAsync();
-    return Results.Ok(order);
+    return Results.Ok(order.ToResponse());
 });
 
 app.MapGet("/orders/daily-summary/{date}", async (string date, IQuerySession session) =>

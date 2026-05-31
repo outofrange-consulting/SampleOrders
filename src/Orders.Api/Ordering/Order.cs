@@ -5,9 +5,9 @@ public record OrderItem(string Sku, int Quantity, decimal UnitPrice);
 public class Order
 {
     public Guid Id { get; set; }
-    public string CustomerId { get; set; } = "";
-    public OrderStatus Status { get; set; } = OrderStatus.Draft;
-    public List<OrderItem> Items { get; set; } = new();
+    public string CustomerId { get; private set; } = "";
+    public OrderStatus Status { get; private set; } = OrderStatus.Draft;
+    public List<OrderItem> Items { get; private set; } = new();
     public decimal Total => Items.Sum(i => i.UnitPrice * i.Quantity);
 
     public void Apply(OrderCreated e)

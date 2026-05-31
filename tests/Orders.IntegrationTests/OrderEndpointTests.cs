@@ -48,7 +48,7 @@ public class OrderEndpointTests
             s.Get.Url(location);
             s.StatusCodeShouldBeOk();
         });
-        var draft = getResult.ReadAsJson<Order>();
+        var draft = getResult.ReadAsJson<OrderResponse>();
         await Assert.That(draft!.Status).IsEqualTo(OrderStatus.Draft);
 
         // CONFIRM
@@ -57,7 +57,7 @@ public class OrderEndpointTests
             s.Post.Json(new { }).ToUrl($"{location}/confirm");
             s.StatusCodeShouldBeOk();
         });
-        var order = confirmed.ReadAsJson<Order>();
+        var order = confirmed.ReadAsJson<OrderResponse>();
         await Assert.That(order!.Status).IsEqualTo(OrderStatus.Confirmed);
         await Assert.That(order.Total).IsEqualTo(20m);
     }

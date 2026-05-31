@@ -7,6 +7,19 @@ namespace Orders.Api.Ordering;
 public record CreateOrder(string CustomerId);
 public record AddItem(string Sku, int Quantity, decimal UnitPrice);
 
+public record OrderResponse(
+    Guid Id,
+    string CustomerId,
+    OrderStatus Status,
+    IReadOnlyList<OrderItem> Items,
+    decimal Total);
+
+public static class OrderExtensions
+{
+    public static OrderResponse ToResponse(this Order order) =>
+        new(order.Id, order.CustomerId, order.Status, order.Items.AsReadOnly(), order.Total);
+}
+
 public static class OrderEndpoints
 {
     [WolverinePost("/orders")]
@@ -23,5 +36,5 @@ public static class OrderEndpoints
         => new(cmd.Sku, cmd.Quantity, cmd.UnitPrice);
 
     [WolverineGet("/orders/{id}")]
-    public static Order Get([Document] Order order) => order;
+    public static OrderResponse Get([Document] Order order) => order.ToResponse();
 }
