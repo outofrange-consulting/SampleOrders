@@ -1,0 +1,49 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+out/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+packages/
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# .NET local tools
+.config/dotnet-tools.json
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS / VS Code
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+coverage*/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
