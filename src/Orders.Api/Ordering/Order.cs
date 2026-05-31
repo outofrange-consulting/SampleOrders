@@ -28,4 +28,4 @@ public enum OrderStatus { Draft, Confirmed, Cancelled }
 
 public record OrderCreated(Guid OrderId, string CustomerId);
 public record OrderItemAdded(string Sku, int Quantity, decimal UnitPrice);
-public record OrderConfirmed(Guid OrderId, string CustomerId, decimal Total);
+public record OrderConfirmed(Guid OrderId, string CustomerId, decimal Total, DateTimeOffset ConfirmedAt);

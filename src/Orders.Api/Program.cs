@@ -15,6 +15,7 @@ builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("marten")!);
     opts.Projections.Snapshot<Order>(SnapshotLifecycle.Inline);
+    opts.Projections.Add<DailyOrderSummaryProjection>(ProjectionLifecycle.Async);
 })
 .IntegrateWithWolverine()
 .UseLightweightSessions()
@@ -58,11 +59,17 @@ app.MapPost("/orders/{id}/confirm", async (Guid id, IDocumentSession session) =>
         return Results.NotFound();
     if (!order.HasItems)
         return Results.Problem("Cannot confirm an empty order.", statusCode: 400);
-    var confirmedEvent = new OrderConfirmed(order.Id, order.CustomerId, order.Total);
+    var confirmedEvent = new OrderConfirmed(order.Id, order.CustomerId, order.Total, DateTimeOffset.UtcNow);
     order.Apply(confirmedEvent);
     session.Events.Append(id, confirmedEvent);
     await session.SaveChangesAsync();
     return Results.Ok(order);
+});
+
+app.MapGet("/orders/daily-summary/{date}", async (string date, IQuerySession session) =>
+{
+    var summary = await session.LoadAsync<DailyOrderSummary>(date);
+    return summary is null ? Results.NotFound() : Results.Ok(summary);
 });
 
 app.Run();

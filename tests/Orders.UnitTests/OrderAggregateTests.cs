@@ -25,7 +25,7 @@ public class OrderAggregateTests
         var id = Guid.NewGuid();
         order.Apply(new OrderCreated(id, "cust-1"));
         order.Apply(new OrderItemAdded("SKU-1", 1, 5m));
-        order.Apply(new OrderConfirmed(id, "cust-1", 5m));
+        order.Apply(new OrderConfirmed(id, "cust-1", 5m, DateTimeOffset.UtcNow));
 
         await Assert.That(order.Status).IsEqualTo(OrderStatus.Confirmed);
     }
